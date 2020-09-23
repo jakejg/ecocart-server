@@ -14,6 +14,18 @@ app.get('/', (req, res) => {
     res.end('Welcome to the Stripe setup app! Visit /create-session over POST to get kicking.')
 })
 
+app.post("/create-payment-intent", async (req, res) => {
+    const { items } = req.body;
+    // Create a PaymentIntent with the order amount and currency
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: calculateOrderAmount(items),
+      currency: "usd"
+    });
+    return res.send({
+      clientSecret: paymentIntent.client_secret
+    });
+  });
+
 app.post('/create-session', async (req, res) => {
     console.log(req.body)
     const session = await stripe.checkout.sessions.create({
