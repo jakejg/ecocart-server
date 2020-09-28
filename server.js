@@ -15,10 +15,11 @@ app.get('/', (req, res) => {
 })
 
 app.post("/create-payment-intent", async (req, res) => {
-    const { item } = req.body;
+    const { amount } = req.body;
+
     // Create a PaymentIntent with the order amount and currency
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: item.amount,
+      amount: amount*100,
       currency: "usd"
     });
     return res.send({
@@ -49,4 +50,5 @@ app.post('/create-session', async (req, res) => {
     });
     res.json({ id: session.id });
 });
-app.listen(process.env.PORT, () => console.log('Running Stripe setup server ...'));
+
+app.listen(5000, () => console.log(`Running Stripe setup server on port 5000`));
